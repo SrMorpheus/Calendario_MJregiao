@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendário Jovem MPA 2026</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Roboto:wght@300;400;500&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header-logo {
+            position: absolute;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 120px;
+            height: auto;
+        }
+        
+        .header-logo-left {
+            position: absolute;
+            left: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 120px;
+            height: auto;
+        }
+        
+        header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.8em;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .info-box {
+            background: #f8f9fa;
+            padding: 30px;
+            margin: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .info-box h2 {
+            font-family: 'Montserrat', sans-serif;
+            color: #1e3c72;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .info-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .info-box li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .info-box li:before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-size: 0.8em;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .month-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .month-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .month-header {
+            padding: 20px;
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.5em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .month-content {
+            padding: 20px;
+        }
+        
+        .event {
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+        }
+        
+        .event:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        .event-date {
+            font-weight: 600;
+            color: #1e3c72;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        
+        .event-title {
+            color: #333;
+            line-height: 1.5;
+            font-size: 0.95em;
+        }
+        
+        .regional-tag {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+        
+        /* Cores para cada mês */
+        .jan { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .fev { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .mar { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .abr { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .mai { background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); }
+        .jun { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        .jul { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+        .ago { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+        .set { background: linear-gradient(135deg, #ff6e7f 0%, #bfe9ff 100%); }
+        .out { background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); }
+        .nov { background: linear-gradient(135deg, #f77062 0%, #fe5196 100%); }
+        .dez { background: linear-gradient(135deg, #c471f5 0%, #fa71cd 100%); }
+        
+        .event { border-left-color: #667eea; }
+        
+        @media print {
+            body { background: white; padding: 0; }
+            .month-card { page-break-inside: avoid; }
+        }
+        
+        @media (max-width: 768px) {
+            header h1 { font-size: 2em; }
+            .calendar-grid { grid-template-columns: 1fr; }
+            .header-logo, .header-logo-left {
+                position: static;
+                transform: none;
+                display: inline-block;
+                margin: 0 10px 20px 10px;
+                width: 80px;
+            }
+            header {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="logomj.png" alt="Logo MJ" class="header-logo-left">
+            <img src="LogoRG3.png" alt="Logo Ministério Jovem" class="header-logo">
+            <h1>Calendário Jovem 2026</h1>
+            <p>Ministério Jovem Jessie Halliwel – 3ª Região – Santana-AP</p>
+        </header>
+        
+        <div class="info-box">
+            <h2>ℹ️ INFORMAÇÕES DE FUNCIONAMENTO</h2>
+            <ul>
+                <li><strong>Visitas MJA:</strong> Realizadas em dois turnos: Manhã (Maranata Class) e Tarde (Maranata Adoração).</li>
+                <li><strong>Intercâmbios:</strong> A programação de intercâmbio entre os MJs ocorre especificamente durante o Maranata Adoração (à tarde), com organização da programação realizada em conjunto. A equipe da Região está à disposição para suporte.</li>
+                <li><strong>Capacitações:</strong> Dias 25/04 e 20/06, às 20h00, via plataforma online.</li>
+                <li><strong>Escola Sabatina:</strong> Informamos aos Diretores que, durante as visitas aos sábados pela manhã, os MJs podem (de forma opcional) organizar e conduzir a Escola Sabatina local. A equipe da Região está à disposição para suporte.</li>
+                <li><strong>⚠️ OBSERVAÇÃO:</strong> Este calendário poderá sofrer ajustes e alterações conforme as necessidades da Missão ou da Região.</li>
+            </ul>
+        </div>
+        
+        <div class="calendar-grid">
+            <!-- JANEIRO -->
+            <div class="month-card">
+                <div class="month-header jan">Janeiro</div>
+                <div class="month-content">
+                    <div class="event">
+                        <div class="event-date">03</div>
+                        <div class="event-title">Evangelismo das Primícias</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">05</div>
+                        <div class="event-title">Início das Atividades do Ministério Jovem</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">07</div>
+                        <div class="event-title">Inscrição-Seguro Anual e Ranking 2026</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">10</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> Reunião com Diretores (Metas e Ranking)</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">13</div>
+                        <div class="event-title">Fim das Férias Pastorais</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">14 a 16</div>
+                        <div class="event-title">Concílio Pastoral</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">17</div>
+                        <div class="event-title">Sábado de Mordomia Cristã (Manhã) e Maranata Faith (Tarde)</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">24</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> Visita 01: MJ Ministros do Fort | Intercâmbio: MJ Anju's</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">24</div>
+                        <div class="event-title">Concílio do Ancionato - Amapá</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">25</div>
+                        <div class="event-title">Concílio de Coordenadores, Regionais e Distritais MJ - Amapá</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">30</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> PG Jovem – MJ Atalaias de Sião</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">30</div>
+                        <div class="event-title">Treinamento de Coordenadores MJ - UNB</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FEVEREIRO -->
+            <div class="month-card">
+                <div class="month-header fev">Fevereiro</div>
+                <div class="month-content">
+                    <div class="event">
+                        <div class="event-date">01</div>
+                        <div class="event-title">Treinamento de Coordenadores MJ - UNB</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">01 a 08</div>
+                        <div class="event-title">Treinamento OYIM - UNB</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">07</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> Visita 02: MJ Servos de Cristo | Intercâmbio: MJ Tom</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">08</div>
+                        <div class="event-title">Convenção do Ministério Jovem</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">10 a 15</div>
+                        <div class="event-title">1ª Etapa de Inscrições do Maranata Norte</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">13 a 18</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> Retiro: Meu Lugar no Mundo</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">19 a 28</div>
+                        <div class="event-title">10 Dias de Oração e 10 Horas de Jejum</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">21 a 28</div>
+                        <div class="event-title">Adorai 2026</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">28</div>
+                        <div class="event-title">Encerramento dos 10 Dias de Oração (Manhã)</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- MARÇO -->
+            <div class="month-card">
+                <div class="month-header mar">Março</div>
+                <div class="month-content">
+                    <div class="event">
+                        <div class="event-date">01</div>
+                        <div class="event-title">Pedalando pela Vida - Ministério Jovem</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">06</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> PG Jovem – MJ Príncipe da Paz</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">07</div>
+                        <div class="event-title">IDE Treinamento Departamentos - Amapá</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">14</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> Jotão Pós-Retiro</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">14</div>
+                        <div class="event-title">Sábado de Mordomia Cristã (Manhã) e Maranata Faith (Tarde)</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">15</div>
+                        <div class="event-title">Aula Inaugural - Fábrica de Líderes e Maranata Academy</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">20 e 21</div>
+                        <div class="event-title">Maranata Norte On-Line</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">21</div>
+                        <div class="event-title">Dia Mundial do Jovem Adventista</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">22</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> Domingo Alegre (Comemoração Dia Mundial JA)</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">28 a 04/04</div>
+                        <div class="event-title">Evangelismo de Semana Santa - Macapá</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ABRIL -->
+            <div class="month-card">
+                <div class="month-header abr">Abril</div>
+                <div class="month-content">
+                    <div class="event">
+                        <div class="event-date">01 a 31</div>
+                        <div class="event-title">Evangelismo Pastoral e Master</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">04</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> Atividade Missionária (Hosp. Santana / Casa Hospitalidade)</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">11</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> Visita 03: MJ Discípulos | Intercâmbio: MJ Ministros do Fort</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">15 a 16</div>
+                        <div class="event-title">Inscrição VI Campori DSA</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">18</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> Visita 04: MJ Herdeiros da Salvação | Intercâmbio: MJ Atalaias de Sião</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">25</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> Visita 05: MJ Anju's | Intercâmbio: MJ Arautos</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">25</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> Capacitação Regional Online (20:00h)</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">26</div>
+                        <div class="event-title">Fábrica de Líderes e Maranata Academy - Amapá</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- MAIO -->
+            <div class="month-card">
+                <div class="month-header mai">Maio</div>
+                <div class="month-content">
+                    <div class="event">
+                        <div class="event-date">01</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> PG Jovem – MJ Anju's</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">02</div>
+                        <div class="event-title">Lançamento das Classes Bíblicas</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">03 a 07</div>
+                        <div class="event-title">Cadinho MJ e MDA</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">09</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> Visita 06: MJ Príncipe da Paz | Intercâmbio: MJ Servos de Cristo</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">16</div>
+                        <div class="event-title">Dia Mundial dos Aventureiros</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">17</div>
+                        <div class="event-title">Piquenique do Aventureiro RFA</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">23</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> Visita 07: MJ Herdeiros da Ilha (Convocação Geral)</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">29</div>
+                        <div class="event-title">Lançamento do FEMUSA 2026 - MPA</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">30</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> Visita 08: MJ Tom | Intercâmbio: MJ Geração 360°</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">31</div>
+                        <div class="event-title">Fábrica de Líderes e Maranata Academy - Amapá</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- JUNHO -->
+            <div class="month-card">
+                <div class="month-header jun">Junho</div>
+                <div class="month-content">
+                    <div class="event">
+                        <div class="event-date">04 a 07</div>
+                        <div class="event-title">III LiderUP - Amapá</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">06</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> Visita 09: MJ Geração 360° | Intercâmbio: MJ Príncipe da Paz</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">13</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> Visita 10: MJ Atalaias de Sião | Intercâmbio: MJ Herdeiros da Salvação</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">14</div>
+                        <div class="event-title">Dia Mundial do Doador de Sangue</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">17 a 21</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> Mini Semana de Oração Jovem – Visita nos Pontos de Oração</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">20</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> Visita 11: MJ Arautos | Intercâmbio: MJ Discípulos</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">20</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> Capacitação Regional Online (20:00h)</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">27</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> Consagração Calebe Regional</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">27</div>
+                        <div class="event-title">Dia do Ancionato e FEMUSA Etapa Distrital</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">28</div>
+                        <div class="event-title">Fábrica de Líderes e Maranata Academy - Amapá</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- JULHO -->
+            <div class="month-card">
+                <div class="month-header jul">Julho</div>
+                <div class="month-content">
+                    <div class="event">
+                        <div class="event-date">01 a 05</div>
+                        <div class="event-title">Maranata Norte - UNB</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">06 a 26</div>
+                        <div class="event-title">Missão Calebe 2026</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">26 a 31</div>
+                        <div class="event-title">Celebração Calebe Distrital</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AGOSTO -->
+            <div class="month-card">
+                <div class="month-header ago">Agosto</div>
+                <div class="month-content">
+                    <div class="event">
+                        <div class="event-date">01</div>
+                        <div class="event-title"><span class="regional-tag">REGIONAL</span> Piquenique de Celebração Calebe (Praça do Meio do Mundo)</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">22</div>
+                        <div class="event-title">Quebrando o Silêncio 2026</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">23</div>
+                        <div class="event-title">Última Fábrica de Líderes e Maranata Academy - Amapá</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">29</div>
+                        <div class="event-title">FEMUSA Etapa Regional</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SETEMBRO -->
+            <div class="month-card">
+                <div class="month-header set">Setembro</div>
+                <div class="month-content">
+                    <div class="event">
+                        <div class="event-date">07</div>
+                        <div class="event-title">Desfile Cívico - Amapá</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">19</div>
+                        <div class="event-title">Dia Mundial dos Desbravadores</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- OUTUBRO -->
+            <div class="month-card">
+                <div class="month-header out">Outubro</div>
+                <div class="month-content">
+                    <div class="event">
+                        <div class="event-date">09 a 11</div>
+                        <div class="event-title">IV Lidera Camp MJ-MDA</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">17</div>
+                        <div class="event-title">Impacto Esperança</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">18</div>
+                        <div class="event-title">FEMUSA Etapa Campo - Amapá</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">25</div>
+                        <div class="event-title">Olimp Jovem</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">31</div>
+                        <div class="event-title">Etapa Final do Ranking de Excelência 2026</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- NOVEMBRO -->
+            <div class="month-card">
+                <div class="month-header nov">Novembro</div>
+                <div class="month-content">
+                    <div class="event">
+                        <div class="event-date">05</div>
+                        <div class="event-title">Lançamento do Tema JA 2027</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">20 a 22</div>
+                        <div class="event-title">EJC - Encontro de Jovens com Cristo (Macapá)</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">30</div>
+                        <div class="event-title">Concílio Anual da MPA</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- DEZEMBRO -->
+            <div class="month-card">
+                <div class="month-header dez">Dezembro</div>
+                <div class="month-content">
+                    <div class="event">
+                        <div class="event-date">05</div>
+                        <div class="event-title">Encerramento das Atividades do Ministério Jovem 2026</div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">19</div>
+                        <div class="event-title">Mutirão de Natal</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
